@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>BetBot AI – Kupony 16–18 maja</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; padding: 20px; }
+    button, input {
+      margin: 5px;
+      padding: 10px 20px;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .kupon {
+      background: white;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .typ { font-size: 18px; font-weight: bold; margin-top: 10px; }
+    .analiza, .analizaDodatkowa {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    .podsumowanie {
+      font-weight: bold;
+      color: #222;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎯 BetBot AI – Kupony 16–18 maja 2025</h1>
+
+<label for="stawka">Wpisz stawkę (zł):</label>
+<input type="number" id="stawka" value="10" min="1"><br>
+
+<button onclick="pokazKupony('pewniaczki')">Pewniaczki</button>
+<button onclick="pokazKupony('srednie')">Średnie ryzyko</button>
+<button onclick="pokazKupony('duze')">Duże ryzyko</button>
+
+<div id="kupony"></div>
+
+<script>
+  const bazaKuponow = {
+    pewniaczki: [
+      {
+        typ: "Real Madryt wygra z Alavés",
+        kurs: 1.22,
+        analiza: "Real gra u siebie, Alavés gra fatalnie na wyjazdach.",
+        dodatkowe: "📊 Real nie przegrał u siebie od 400 dni.<br>📊 Alavés: tylko 2 wygrane na 17 wyjazdów."
+      },
+      {
+        typ: "Bayern Monachium wygra z Wolfsburgiem",
+        kurs: 1.25,
+        analiza: "Bayern po Lidze Mistrzów będzie chciał się zrehabilitować.",
+        dodatkowe: "📊 Bayern: średnio 2.9 gola u siebie.<br>📊 Wolfsburg: 3 porażki z rzędu."
+      },
+      {
+        typ: "Inter Mediolan wygra z Lazio",
+        kurs: 1.30,
+        analiza: "Inter pewnie zmierza po mistrzostwo, Lazio bez lidera.",
+        dodatkowe: "⚫🔵 Inter: 10 kolejek z rzędu bez straty bramki w 1. połowie.<br>📊 Lazio bez Immobile strzela średnio 0.6 gola."
+      },
+      {
+        typ: "Benfica wygra z Estoril",
+        kurs: 1.18,
+        analiza: "Benfica w walce o mistrzostwo, Estoril w strefie spadkowej.",
+        dodatkowe: "📊 Benfica: 8 wygranych z rzędu u siebie.<br>📊 Estoril: tylko 1 wyjazdowa wygrana w sezonie."
+      }
+    ],
+    srednie: [
+      {
+        typ: "Liverpool – Aston Villa: powyżej 2.5 gola",
+        kurs: 1.80,
+        analiza: "Obie drużyny ofensywne, średnia 3.6 gola na mecz.",
+        dodatkowe: "📊 Liverpool: 21 strzałów/mecz – najwięcej w Premier League.<br>📊 Villa: 7 BTTS z rzędu."
+      },
+      {
+        typ: "Roma – Genoa: obie strzelą",
+        kurs: 1.85,
+        analiza: "Roma gra otwartą piłkę, Genoa groźna na wyjazdach.",
+        dodatkowe: "📊 Roma: BTTS w 5/6 meczów.<br>📊 Genoa: gol w każdym wyjeździe od lutego."
+      },
+      {
+        typ: "Juventus wygra z Salernitaną do zera",
+        kurs: 1.95,
+        analiza: "Salernitana najsłabszy atak ligi.",
+        dodatkowe: "📊 Szczęsny: 9 czystych kont u siebie.<br>📊 Salernitana: 0 goli w 4 ostatnich meczach."
+      },
+      {
+        typ: "Galatasaray wygra z Rizesporem",
+        kurs: 1.60,
+        analiza: "Gala w formie mistrzowskiej, Rizespor słaby na wyjazdach.",
+        dodatkowe: "📊 Galatasaray: 6 wygranych z rzędu.<br>📊 Rizespor: 0 wygranych w 8 wyjazdach."
+      }
+    ],
+    duze: [
+      {
+        typ: "PSG wygra z Toulouse i obie NIE strzelą",
+        kurs: 3.20,
+        analiza: "PSG u siebie bezbłędne, Toulouse nieskuteczne.",
+        dodatkowe: "📊 PSG: 4/5 meczów bez straty gola.<br>📊 Toulouse: 1 gol w 4 meczach."
+      },
+      {
+        typ: "Chelsea zremisuje z Bournemouth",
+        kurs: 3.50,
+        analiza: "Chelsea niestabilna, Bournemouth często punktuje końcówką.",
+        dodatkowe: "📊 Chelsea: 2 remisy z rzędu.<br>📊 Bournemouth: 11 goli po 85. minucie."
+      },
+      {
+        typ: "Torino wygra z Atalantą dokładnie 1:0",
+        kurs: 6.00,
+        analiza: "Torino lubi kontrataki i dobrze broni wynik.",
+        dodatkowe: "📊 Torino: najlepsza średnia przechwytów w Serie A.<br>📊 Atalanta: 3 porażki z rzędu 0:1."
+      },
+      {
+        typ: "Brighton – Man United: dokładny wynik 2:2",
+        kurs: 10.00,
+        analiza: "Obie drużyny nieregularne, strzelają i tracą.",
+        dodatkowe: "📊 Brighton: 12 remisów w sezonie.<br>📊 Man Utd: BTTS +2.5 w 4/5 meczach."
+      }
+    ]
+  };
+
+  function pokazKupony(poziom) {
+    const stawka = parseFloat(document.getElementById("stawka").value);
+    const kuponyDiv = document.getElementById("kupony");
+    kuponyDiv.innerHTML = "";
+
+    const kupony = bazaKuponow[poziom].sort(() => 0.5 - Math.random()).slice(0, 3);
+    let lacznyKurs = 1;
+
+    kupony.forEach((k, index) => {
+      lacznyKurs *= k.kurs;
+      kuponyDiv.innerHTML += `
+        <div class="kupon">
+          <div class="typ">📌 ${k.typ} (${k.kurs.toFixed(2)})</div>
+          <div class="analiza">🧠 ${k.analiza}</div>
+          <button onclick="toggleAnaliza(${index})">🔍 Pokaż więcej analizy</button>
+          <div class="analizaDodatkowa" id="analiza-${index}" style="display:none;">${k.dodatkowe}</div>
+        </div>`;
+    });
+
+    const wygrana = (stawka * lacznyKurs).toFixed(2);
+    kuponyDiv.innerHTML += `
+      <div class="kupon podsumowanie">
+        🔢 Łączny kurs: ${lacznyKurs.toFixed(2)}<br>
+        💰 Możliwa wygrana z ${stawka} zł: <strong>${wygrana} zł</strong>
+      </div>
+    `;
+  }
+
+  function toggleAnaliza(id) {
+    const el = document.getElementById(`analiza-${id}`);
+    el.style.display = el.style.display === "none" ? "block" : "none";
+  }
+</script>
+
+</body>
+</html>
