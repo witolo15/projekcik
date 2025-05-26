@@ -72,7 +72,15 @@ button:active {
   color: #777;
   margin-top: 10px;
   display: none;
+  #rzutMoneta button {
+  background: #ffd700;
+  color: #000;
+  transition: transform 0.2s;
 }
+#rzutMoneta button:hover {
+  transform: scale(1.05);
+}
+
 
   </style>
 </head>
@@ -86,6 +94,11 @@ button:active {
 <button onclick="pokazKupony('pewniaczki')">Pewniaczki</button>
 <button onclick="pokazKupony('srednie')">Średnie ryzyko</button>
 <button onclick="pokazKupony('duze')">Duże ryzyko</button>
+<button onclick="pokazRzutMoneta()">🎲 Rzut monetą</button>
+<div id="rzutMoneta" style="display: none; margin-top: 20px;">
+  <button onclick="rzucMoneta()">Rzuć monetą</button>
+  <div id="wynikMonety" style="font-size: 24px; font-weight: bold; margin-top: 15px;"></div>
+</div>
 
 <div id="kupony"></div>
 
@@ -473,6 +486,23 @@ button:active {
     const el = document.getElementById(`analiza-${id}`);
     el.style.display = el.style.display === "none" ? "block" : "none";
   }
+  function pokazRzutMoneta() {
+  document.getElementById("kupony").innerHTML = "";
+  document.getElementById("rzutMoneta").style.display = "block";
+  document.getElementById("generowanie").style.display = "none";
+}
+
+function rzucMoneta() {
+  const wynikDiv = document.getElementById("wynikMonety");
+  wynikDiv.textContent = "Rzucam...";
+  wynikDiv.style.color = "#555";
+  setTimeout(() => {
+    const wynik = Math.random() < 0.5 ? "Orzeł 🦅" : "Reszka 🪙";
+    wynikDiv.textContent = `Wynik: ${wynik}`;
+    wynikDiv.style.color = "#111";
+  }, 800); // symulacja rzutu
+}
+
 </script>
 
 </body>
