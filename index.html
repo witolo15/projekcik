@@ -107,7 +107,7 @@ button:active {
 <button onclick="pokazKupony('pewniaczki')">Pewniaczki</button>
 <button onclick="pokazKupony('srednie')">Średnie ryzyko</button>
 <button onclick="pokazKupony('duze')">Duże ryzyko</button>
-<button onclick="pokazRzutMoneta()">🎲 Rzut monetą</button>
+<button id="przyciskMoneta" onclick="pokazRzutMoneta()">🎲 Rzut monetą</button>
 <div id="rzutMoneta" style="display: none; margin-top: 20px;">
   <button onclick="rzucMoneta()">Rzuć monetą</button>
   <div id="wynikMonety" style="font-size: 24px; font-weight: bold; margin-top: 15px;"></div>
@@ -474,6 +474,7 @@ button:active {
 
     const kupony = bazaKuponow[poziom].sort(() => 0.5 - Math.random()).slice(0, 3);
     let lacznyKurs = 1;
+    
 
     kupony.forEach((k, index) => {
       lacznyKurs *= k.kurs;
